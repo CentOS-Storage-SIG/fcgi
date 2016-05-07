@@ -1,6 +1,8 @@
+%global _hardened_build 1
+
 Name:           fcgi
 Version:        2.4.0
-Release:        21%{?dist}
+Release:        25%{?dist}
 Summary:        FastCGI development kit
 
 Group:          Development/Languages
@@ -13,6 +15,9 @@ Patch0:         fcgi-2.4.0-autotools.patch
 Patch1:         fcgi-2.4.0-configure.in.patch
 Patch2:         fcgi-2.4.0-Makefile.am-CPPFLAGS.patch
 Patch3:         fcgi-2.4.0-gcc44_fixes.patch
+Patch4:         fcgi-2.4.0-poll.patch
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 
 %description
 FastCGI is a language independent, scalable, open extension to CGI that
@@ -34,6 +39,7 @@ developing applications that use %{name}.
 %setup -q
 %patch0 -p1
 %patch3 -p1 -b .gcc44_fixes
+%patch4 -p1 -b .poll
 
 # remove DOS End Of Line Encoding
 sed -i 's/\r//' doc/fastcgi-prog-guide/ch2c.htm
@@ -85,6 +91,19 @@ rm -f -- doc/*.3
 
 
 %changelog
+* Fri Feb 06 2015 Till Maas <opensource@till.name> - 2.4.0-25
+- Fix crash when too many connections are used
+- Make gcc build dependencies obvious for local builds
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.0-24
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.0-23
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Mon Feb 03 2014 Till Maas <opensource@till.name> - 2.4.0-22
+- Harden build
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.0-21
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -139,7 +158,7 @@ rm -f -- doc/*.3
 * Thu Aug 23 2007 Till Maas <opensource till name> - 2.4.0-4
 - bump release for rebuild
 
-* Tue Jul 11 2007 Till Maas <opensource till name> - 2.4.0-3
+* Wed Jul 11 2007 Till Maas <opensource till name> - 2.4.0-3
 - remove parallel make flags
 
 * Tue Apr 17 2007 Till Maas <opensource till name> - 2.4.0-2
